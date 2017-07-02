@@ -1,17 +1,16 @@
 package de.tu_berlin.open_data.airquality.brandenburgairqualitydata;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.util.NumberToGermanDaysOfWeek;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.task.configuration.EnableTask;
-import org.springframework.cloud.task.listener.annotation.BeforeTask;
-import org.springframework.cloud.task.repository.TaskExecution;
 
 import java.io.*;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @SpringBootApplication
 @EnableTask
@@ -20,14 +19,15 @@ public class BrandenburgAirQualityDataApplication {
 
     public void init() throws IOException, InvalidFormatException {
 
-        File file = new File("Montag.xls");
-			Workbook wb = WorkbookFactory.create(file);
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
+
+        int dayOfWeek = localDateTime.getDayOfWeek().getValue();
+        URL url = new URL("https://luftdaten.brandenburg.de/home/-/bereich/datenexport/" + NumberToGermanDaysOfWeek.dayNumberToGermanDayOfWeek.get(dayOfWeek) + ".xls");
+       // System.out.println(url.getPath());
+
+        InputStream inputStream = url.openStream();
+			Workbook wb = WorkbookFactory.create(inputStream);
 			Sheet sheet = wb.getSheetAt(0);
-//
-//        FileInputStream fis = new FileInputStream(file);
-//        HSSFWorkbook wb = new HSSFWorkbook(fis);
-//
-//        HSSFSheet sheet = wb.getSheetAt(0);
 
         while (sheet.getNumMergedRegions() > 0){
 
@@ -40,7 +40,7 @@ public class BrandenburgAirQualityDataApplication {
         removeRow(sheet, 0);
         removeRow(sheet, 0);
 
-        File outWB = new File("Montag-work.xls");
+        File outWB = new File("source.xls");
         OutputStream out = new FileOutputStream(outWB);
        // fis.close();
         wb.write(out);

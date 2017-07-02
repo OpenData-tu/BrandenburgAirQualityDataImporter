@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 public class AirQualityItemProcessor implements ItemProcessor<AirQuality, String> {
@@ -25,8 +27,7 @@ public class AirQualityItemProcessor implements ItemProcessor<AirQuality, String
 
     public String process(AirQuality item) throws Exception {
 
-        item.setTimestamp("2099-11-11");
-
+        item.setTimestamp(applicationService.toISODateFormat(LocalDateTime.now(ZoneId.of("Europe/Berlin")).toString()));
 
         return jsonSchemaCreator.create(item);
     }

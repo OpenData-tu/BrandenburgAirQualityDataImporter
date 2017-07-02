@@ -24,7 +24,7 @@ public class AirQualityJsonSchemaCreator implements JsonSchemaCreator {
         ObjectNode mainObject = nodeFactory.objectNode();
 
         mainObject.put("source_id", "brandenburg_air_quality_data");
-        mainObject.put("device", "Brandenburg Station");
+        mainObject.put("device", airQualityItem.getMeasurementLocation());
         mainObject.put("timestamp", airQualityItem.getTimestamp().toString());
 
 

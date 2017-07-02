@@ -1,7 +1,6 @@
 package de.tu_berlin.open_data.airquality.brandenburgairqualitydata.batch;
 
 import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.model.AirQuality;
-import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.service.ApplicationService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -43,36 +42,20 @@ public class BatchConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    public ApplicationService applicationService;
 
     @Autowired
     @Qualifier("dataSource")
     public DataSource dataSource;
 
 
-
-    private static final String PROPERTY_EXCEL_SOURCE_FILE_PATH = "excel.to.database.job.source.file.path";
-
-
     @Bean
-    ItemReader<AirQuality> reader(Environment environment) throws IOException {
+    ItemReader<AirQuality> reader() throws IOException {
         AbstractExcelItemReader<AirQuality> reader = new CustomPoiItemReader();
 
-      URL url = new URL("https://luftdaten.brandenburg.de/home/-/bereich/datenexport/Montag.xls");
-        //reader.setMaxItemCount(10);
        // reader.setResource((new InputStreamResource(new PushbackInputStream(url.openStream()))));
         //reader.setResource((new ClassPathResource("Montag.xls")));
-        reader.setResource(new InputStreamResource(new PushbackInputStream(new FileInputStream(new File("Montag-work.xls")))));
+        reader.setResource(new InputStreamResource(new PushbackInputStream(new FileInputStream(new File("source.xls")))));
         reader.setLinesToSkip(5);
-
-       // reader.setMaxItemCount(20);
-       // reader.setMaxItemCount(10);
-
-
-//        reader.setRowMapper(new BeanWrapperRowMapper<AirQuality>() {{
-//            setTargetType(AirQuality.class);
-//        }});
 
        reader.setRowMapper(excelRowMapper());
         return reader;
