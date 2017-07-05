@@ -15,18 +15,6 @@ import java.lang.reflect.Field;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
-    @Override
-    public String[] getFields(Class<? extends Object> aClass) {
-
-        Field[] aClassDeclaredFields = aClass.getDeclaredFields();
-
-        String[] fieldsArray = new String[aClassDeclaredFields.length];
-
-        for (int index = 0; index < aClassDeclaredFields.length; index++)
-            fieldsArray[index] = aClassDeclaredFields[index].getName();
-
-        return fieldsArray;
-    }
 
     @Override
     public float parseToFloat(String number) {
@@ -34,25 +22,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         try {
             return Float.parseFloat(number);
         } catch (NumberFormatException e) {
-            return 0;
+            return -999999;
         }
 
     }
-
     @Override
     public String toISODateFormat(String date) {
-        return date + "Z";
-    }
-
-    @Override
-    public LineMapper createLineMapper(Class<? extends Schema> aClass, Schema userModelInstance) {
-        return new DefaultLineMapper<Schema>() {{
-            setLineTokenizer(new DelimitedLineTokenizer(userModelInstance.getDelimiter()) {{
-                setNames(getFields(aClass));
-            }});
-            setFieldSetMapper(new BeanWrapperFieldSetMapper<Schema>() {{
-                setTargetType(userModelInstance.getClass());
-            }});
-        }};
+        return date + "T22:00:00+02:00";
     }
 }

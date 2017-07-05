@@ -1,5 +1,6 @@
 *.db
 *.iml
+*.xls
 target/
 !.mvn/wrapper/maven-wrapper.jar
 .idea

@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.LocalDate;
 
+/**
+ * Created by ahmadjawid on 7/1/17.
+ */
 
 public class AirQualityItemProcessor implements ItemProcessor<AirQuality, String> {
 
@@ -27,7 +29,13 @@ public class AirQualityItemProcessor implements ItemProcessor<AirQuality, String
 
     public String process(AirQuality item) throws Exception {
 
-        item.setTimestamp(applicationService.toISODateFormat(LocalDateTime.now(ZoneId.of("Europe/Berlin")).toString()));
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        item.setTimestamp(applicationService.toISODateFormat(yesterday.toString()));
+
+       // yesterday.minusDays(1);
+
+       // item.setTimestamp(applicationService.toISODateFormat(LocalDateTime.now(ZoneId.of("Europe/Berlin")).toString()));
 
         return jsonSchemaCreator.create(item);
     }

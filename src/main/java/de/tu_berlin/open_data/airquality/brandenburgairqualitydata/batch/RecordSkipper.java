@@ -21,7 +21,7 @@ public class RecordSkipper implements SkipPolicy {
             return false;
         } else if (exception instanceof ExcelFileParseException && skipCount <= 5) {
             StringBuilder errorMessage = new StringBuilder();
-            errorMessage.append("An error occured while processing");
+            errorMessage.append("An error occurred while processing");
             errorMessage.append( "\n");
             logger.error("{}", errorMessage.toString());
             return true;

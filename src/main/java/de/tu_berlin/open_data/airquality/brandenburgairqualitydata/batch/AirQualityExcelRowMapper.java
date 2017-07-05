@@ -14,11 +14,6 @@ public class AirQualityExcelRowMapper implements RowMapper<AirQuality> {
 
         AirQuality airQuality = new AirQuality();
 
-//        for (String current: rowSet.getCurrentRow()){
-//            System.out.println(current);
-//            System.out.println("this is it");
-//        }
-
         airQuality.setMeasurementLocation(rowSet.getColumnValue(0));
         airQuality.setNO2DailyAverage(rowSet.getColumnValue(1));
         airQuality.setNO2Max1hAverage(rowSet.getColumnValue(2));

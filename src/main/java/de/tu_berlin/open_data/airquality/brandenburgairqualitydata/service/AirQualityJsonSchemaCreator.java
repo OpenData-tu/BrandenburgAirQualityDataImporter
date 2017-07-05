@@ -2,10 +2,16 @@ package de.tu_berlin.open_data.airquality.brandenburgairqualitydata.service;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.batch.AirQualityItemProcessor;
 import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.model.AirQuality;
 import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.model.Schema;
+import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.model.Location;
+import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.util.LocationToCoordinates;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 /**
  * Created by ahmadjawid on 6/9/17.
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AirQualityJsonSchemaCreator implements JsonSchemaCreator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AirQualityItemProcessor.class);
     @Autowired
     ApplicationService applicationService;
     @Override
@@ -30,8 +37,17 @@ public class AirQualityJsonSchemaCreator implements JsonSchemaCreator {
 
         ObjectNode firstLevelChild = nodeFactory.objectNode();
 
-        firstLevelChild.put("lat", applicationService.parseToFloat("0"));
-        firstLevelChild.put("lon", applicationService.parseToFloat("0"));
+        Location locationCoordinates = LocationToCoordinates.locationNamesToCoordinates.get(airQualityItem.getMeasurementLocation());
+
+        if (locationCoordinates != null){
+            firstLevelChild.put("lat", locationCoordinates.getLat());
+            firstLevelChild.put("lon", locationCoordinates.getLon());
+        }else {
+
+            LOGGER.error("Couldn't map location to coordinates for '" + airQualityItem.getMeasurementLocation() + "'");
+        }
+
+
 
         mainObject.set("location", firstLevelChild);
 

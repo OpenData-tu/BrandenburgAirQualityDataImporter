@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by ahmadjawid on 6/30/17.
  */
 
+/*This class is not used for the time being*/
 @Configuration
 @ConfigurationProperties("resource")
 public class ResourceProperties {

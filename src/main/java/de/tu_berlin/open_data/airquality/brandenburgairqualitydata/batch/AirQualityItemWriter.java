@@ -1,6 +1,5 @@
 package de.tu_berlin.open_data.airquality.brandenburgairqualitydata.batch;
 
-import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.model.AirQuality;
 import de.tu_berlin.open_data.airquality.brandenburgairqualitydata.service.KafkaServiceRecordProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

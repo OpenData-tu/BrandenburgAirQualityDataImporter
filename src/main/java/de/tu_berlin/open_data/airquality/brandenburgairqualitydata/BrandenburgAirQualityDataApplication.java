@@ -12,6 +12,10 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/**
+ * Created by ahmadjawid on 7/1/17.
+ */
+
 @SpringBootApplication
 @EnableTask
 public class BrandenburgAirQualityDataApplication {
@@ -22,7 +26,13 @@ public class BrandenburgAirQualityDataApplication {
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
 
         int dayOfWeek = localDateTime.getDayOfWeek().getValue();
+
+        dayOfWeek--;
+        if (dayOfWeek <= 0){
+            dayOfWeek = 7;
+        }
         URL url = new URL("https://luftdaten.brandenburg.de/home/-/bereich/datenexport/" + NumberToGermanDaysOfWeek.dayNumberToGermanDayOfWeek.get(dayOfWeek) + ".xls");
+            System.out.println("Importing data for : " + NumberToGermanDaysOfWeek.dayNumberToGermanDayOfWeek.get(dayOfWeek));
        // System.out.println(url.getPath());
 
         InputStream inputStream = url.openStream();
