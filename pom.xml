@@ -68,18 +68,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.10.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.11</version>
@@ -91,20 +79,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-excel</artifactId>
 			<version>0.5.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>22.0</version>
 		</dependency>
 
 
