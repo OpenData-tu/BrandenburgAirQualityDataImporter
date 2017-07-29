@@ -3,7 +3,7 @@
 *.xls
 target/
 !.mvn/wrapper/maven-wrapper.jar
-.idea
+/.idea
 .DS_Store
 ### STS ###
 .apt_generated
