@@ -135,7 +135,7 @@ public class BatchConfiguration {
 
     /**
      * Registers a job step named 'step1' which defines how to read, process and write
-     * @return {@link Job}
+     * @return {@link Step}
      * */
     @Bean
     Step step1() throws IOException, InvalidFormatException {
