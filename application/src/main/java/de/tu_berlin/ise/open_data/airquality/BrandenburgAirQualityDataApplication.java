@@ -1,9 +1,7 @@
 package de.tu_berlin.ise.open_data.airquality;
 
-import de.tu_berlin.ise.open_data.airquality.util.NumberToGermanDaysOfWeek;
 import de.tu_berlin.ise.open_data.library.config.ServiceConfiguration;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,11 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.*;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+
 
 /**
  * Created by ahmadjawid on 7/1/17.
