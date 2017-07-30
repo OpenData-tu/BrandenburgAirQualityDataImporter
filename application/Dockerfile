@@ -5,7 +5,7 @@ ADD . /code
 WORKDIR /code
 
 # Dependencies
-ADD target/brandenburg-air-quality-data-0.0.1-SNAPSHOT.jar app.jar
+ADD target/application-0.0.1-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["sh", "app_entrypoint.sh"]
 
