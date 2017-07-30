@@ -1,14 +1,20 @@
 package de.tu_berlin.ise.open_data.airquality;
 
 import de.tu_berlin.ise.open_data.airquality.util.NumberToGermanDaysOfWeek;
+import de.tu_berlin.ise.open_data.library.config.ServiceConfiguration;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.task.configuration.EnableTask;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.*;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -19,74 +25,35 @@ import java.time.ZoneOffset;
 
 @SpringBootApplication
 @EnableTask
-public class BrandenburgAirQualityDataApplication {
-
-    //hello there
-
-
-    public void init() throws IOException, InvalidFormatException {
-
-        LocalDateTime localDateTime = LocalDateTime.of(2017, 07, 04, 22, 00, 00);
-        System.out.println(localDateTime.toString());
-        LocalTime localTime = LocalTime.now();
-        System.out.println(localDateTime.toEpochSecond(ZoneOffset.UTC));
-
-        int dayOfWeek = localDateTime.getDayOfWeek().getValue();
-
-        dayOfWeek--;
-        if (dayOfWeek <= 0){
-            dayOfWeek = 7;
-        }
-        URL url = new URL("https://luftdaten.brandenburg.de/home/-/bereich/datenexport/" + NumberToGermanDaysOfWeek.dayNumberToGermanDayOfWeek.get(dayOfWeek) + ".xls");
-        //TODO correct it. problem -> on Friday it was importing Monday
-        System.out.println("Importing data for : " + NumberToGermanDaysOfWeek.dayNumberToGermanDayOfWeek.get(dayOfWeek));
-       // System.out.println(url.getPath());
-
-        InputStream inputStream = url.openStream();
-			Workbook wb = WorkbookFactory.create(inputStream);
-			Sheet sheet = wb.getSheetAt(0);
-
-        while (sheet.getNumMergedRegions() > 0){
-
-            sheet.removeMergedRegion(0);
-
-        }
-
-        removeRow(sheet, 0);
-        removeRow(sheet, 0);
-        removeRow(sheet, 0);
-        removeRow(sheet, 0);
-
-        File outWB = new File("source.xls");
-        OutputStream out = new FileOutputStream(outWB);
-       // fis.close();
-        wb.write(out);
-        out.flush();
-        out.close();
-
-    }
+@Import(ServiceConfiguration.class)
+public class BrandenburgAirQualityDataApplication implements CommandLineRunner {
 
     public static void main(String[] args) throws IOException {
-        try {
-            new BrandenburgAirQualityDataApplication().init();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
+
         SpringApplication.run(BrandenburgAirQualityDataApplication.class, args);
     }
 
+    //Get an instance from Spring Bean Factory to execute jdbc queries
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    public void removeRow(Sheet sheet, int rowIndex) {
-		int lastRowNum = sheet.getLastRowNum();
-		if (rowIndex >= 0 && rowIndex < lastRowNum) {
-			sheet.shiftRows(rowIndex + 1, lastRowNum, -1);
-		}
-if (rowIndex == lastRowNum) {
-        Row removingRow = sheet.getRow(rowIndex);
-        	if (removingRow != null) {
-        sheet.removeRow(removingRow);
-        }
-        }
+
+    /**
+     * Executes a simple query to make unexpectedly failed jobs restartable that is to start them exactly from where they failed.
+     * In order for the jobs to be restartable you should use a persistent database (not in memory).
+     */
+    @Override
+    public void run(String... strings) throws Exception {
+
+
+
+        jdbcTemplate.execute("UPDATE BATCH_JOB_EXECUTION a SET a.VERSION=a.VERSION + 1, END_TIME=LAST_UPDATED," +
+                " STATUS='FAILED', EXIT_CODE='FAILED' WHERE STATUS='STARTED'" +
+                " AND a.JOB_INSTANCE_ID = (SELECT JOB_INSTANCE_ID FROM BATCH_JOB_INSTANCE WHERE JOB_INSTANCE_ID = a.JOB_INSTANCE_ID)" +
+                " AND END_TIME IS NULL");
     }
+
+
+
 
 }

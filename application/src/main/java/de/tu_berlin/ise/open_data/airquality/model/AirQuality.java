@@ -1,7 +1,11 @@
 package de.tu_berlin.ise.open_data.airquality.model;
 
+import de.tu_berlin.ise.open_data.library.model.Schema;
+
 /**
  * Created by ahmadjawid on 6/29/17.
+ *All necessary fields for parsing data from source are defined here.
+ * Final fields are not used when parsing from file.
  */
 public class AirQuality extends Schema {
 
@@ -22,6 +26,19 @@ public class AirQuality extends Schema {
     private String O3DailyAverage;
     private String O3Max8hAverage;
     private String timestamp;
+
+
+    /**
+     * Declared as final to skip the field when parsing the file
+     */
+    private final String sourceId = "luftdaten_brandenburg_de";
+
+    /**
+     * Declared as final to skip the field when parsing the file
+     */
+    private final String license = "find out";
+
+
 
     public String getMeasurementLocation() {
         return measurementLocation;
@@ -149,6 +166,14 @@ public class AirQuality extends Schema {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public String getLicense() {
+        return license;
     }
 
     @Override

@@ -2,6 +2,8 @@ package de.tu_berlin.ise.open_data.airquality.model;
 
 /**
  * Created by rohullahayobi on 6/28/17.
+ * When mapping location names to coordinates for the importer manually,
+ * location names are mapped to attributes (lat, lon) of this class
  */
 public class Location {
 

@@ -8,25 +8,41 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by ahmadjawid on 7/28/17.
+ * Object of this class can be passed to job steps to keep track of processing steps and chunks
  */
 @Component
 public class StepProcessListener implements StepExecutionListener, ChunkListener {
 
-    //this is step process listener
-
     private static final Logger LOGGER = LoggerFactory.getLogger(StepProcessListener.class);
+
+
+    /**
+     * Automatically called before step begins
+     * @param stepExecution
+     * */
     @Override
     public void beforeStep(StepExecution stepExecution) {
 
     }
 
+
+    /**
+     * Automatically called after step finishes
+     * @param stepExecution
+     * */
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
 
         LOGGER.info(stepExecution.getSummary());
+
+        //Return null to indicate that step did not fail
         return null;
     }
 
+    /**
+     * Automatically called before processing next chunk
+     * @param context
+     * */
     @Override
     public void beforeChunk(ChunkContext context) {
 
@@ -34,12 +50,21 @@ public class StepProcessListener implements StepExecutionListener, ChunkListener
 
     }
 
+
+    /**
+     * Automatically called after processing the chunk
+     * @param context
+     * */
     @Override
     public void afterChunk(ChunkContext context) {
 
         LOGGER.info(context.getStepContext().getStepExecution().getSummary());
     }
 
+    /**
+     * Automatically called if an error occurs while processing the chunk
+     * @param context
+     * */
     @Override
     public void afterChunkError(ChunkContext context) {
 

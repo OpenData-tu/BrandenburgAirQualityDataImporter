@@ -15,6 +15,13 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+/**
+ * Created by ahmadjawid on 6/13/17.
+ * Includes configuration for kafka.
+ * All re-usable beans are registered here
+ *
+ */
+
 @Configuration
 @EnableConfigurationProperties({KafkaProperties.class})
 public class ServiceConfiguration {
@@ -23,6 +30,10 @@ public class ServiceConfiguration {
     @Autowired
     private KafkaProperties kafkaProperties;
 
+
+    /**Set the properties of kafka producer
+     * @return KafkaProducer
+     * */
     @Bean
     Producer producer() {
 

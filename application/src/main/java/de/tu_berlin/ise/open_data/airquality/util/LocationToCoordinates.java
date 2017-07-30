@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * Created by rohullah on 05.07.17.
+ * Mapping of all location names to coordinates manually using a HashMap object
  */
 public class LocationToCoordinates {
 

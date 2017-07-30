@@ -6,6 +6,10 @@ import org.springframework.batch.item.excel.support.rowset.RowSet;
 
 /**
  * Created by ahmadjawid on 7/1/17.
+ * /**
+ * Excel document cannot be read using the AirQuality class.
+ * custom row mapper to map columns of excel file to attributes of the class {@link AirQuality}
+ * @return AirQualityExcelRowMapper
  */
 public class AirQualityExcelRowMapper implements RowMapper<AirQuality> {
 
@@ -14,6 +18,8 @@ public class AirQualityExcelRowMapper implements RowMapper<AirQuality> {
 
         AirQuality airQuality = new AirQuality();
 
+        //Index 0 to 14 each indicating a column of excel file.
+        //Read each index with its respected attribute.
         airQuality.setMeasurementLocation(rowSet.getColumnValue(0));
         airQuality.setNO2DailyAverage(rowSet.getColumnValue(1));
         airQuality.setNO2Max1hAverage(rowSet.getColumnValue(2));

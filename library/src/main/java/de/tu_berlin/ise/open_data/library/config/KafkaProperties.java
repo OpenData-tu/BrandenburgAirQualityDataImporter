@@ -5,16 +5,16 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Created by ahmadjawid on 6/13/17.
+ * Properties of kafka server are provided here.
+ * These values are overridden by application.properties overridden by environment variables
+ *
  */
 @Configuration
 @ConfigurationProperties("kafka")
 public class KafkaProperties {
 
 
-    /**
-     * defaults to kafka.serializer.StringEncoder
-     */
-    private String partitionerClass;
+
 
     /**
      * Number of replicas required to acknowledge the writing of data to the queue before proceeding.
@@ -36,19 +36,9 @@ public class KafkaProperties {
     private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
 
     /**
-     * defaults to weatherData
+     * defaults to topic
      */
-
-    private String topic = "weatherData";
-
-
-    public String getPartitionerClass() {
-        return partitionerClass;
-    }
-
-    public void setPartitionerClass(String partitionerClass) {
-        this.partitionerClass = partitionerClass;
-    }
+    private String topic = "topic";
 
     public String getAcks() {
         return acks;

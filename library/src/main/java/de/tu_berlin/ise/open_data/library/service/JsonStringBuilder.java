@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by ahmadjawid on 7/13/17.
+ *
+ *  User can create a json object according to our data source schema using this utility class
+ *  He/She should set the necessary fields using setter methods and then call the build method to produce json string
  */
 
 @Service
@@ -39,7 +41,11 @@ public class JsonStringBuilder {
     public JsonStringBuilder() {
         applicationService = new ApplicationServiceImpl();
         nodeFactory = JsonNodeFactory.instance;
+
+        //Get an instance of object node. This is considered as the root json object (outer most) that contains all others objects and fields
         mainObject = nodeFactory.objectNode();
+
+        //Will contains all sensors' objects (measurements)
         sensors = nodeFactory.objectNode();
         location = nodeFactory.objectNode();
     }
@@ -79,15 +85,27 @@ public class JsonStringBuilder {
         sensors.set(measurement, secondLevelChild);
     }
 
+    /**
+     * Gets a Java Object, converts it to json, and adds, it as the extra field of our data source schema.
+     * @param extra
+     * */
     public void setExtra(Object extra) {
 
         ObjectMapper mapper = new ObjectMapper();
+
+        //Convert extra to json object.
         ObjectNode objectNode = mapper.convertValue(extra, ObjectNode.class);
 
         this.extra = objectNode;
 
     }
 
+
+    /**
+    * Call this method once you set all properties.
+     * Builds json an returns the value.
+     * @return String
+    * */
     public String build() throws JSONException {
 
         mainObject.put("sourceId", sourceId);
@@ -96,11 +114,11 @@ public class JsonStringBuilder {
         mainObject.set("location", location);
         mainObject.put("license", license);
         mainObject.set("sensors", sensors);
-        mainObject.set("extra", extra);
 
-        JSONObject jsonObject = new JSONObject(mainObject.toString());
+        if (extra != null) {
+            mainObject.set("extra", extra);
+        }
 
-        //  mainObject.removeAll();
 
         return mainObject.toString();
     }

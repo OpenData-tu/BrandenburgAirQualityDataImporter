@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * Created by ahmadjawid on 7/2/17.
+ * Mapping of day of week as number to its corresponding word
  */
 public class NumberToGermanDaysOfWeek {
 

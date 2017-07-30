@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 
 /**
  * Created by ahmadjawid on 7/1/17.
+ *A defined amount of records could be skipped when a particular exception occurs
  */
 public class RecordSkipper implements SkipPolicy {
 
@@ -17,12 +18,17 @@ public class RecordSkipper implements SkipPolicy {
 
     @Override
     public boolean shouldSkip(Throwable exception, int skipCount) throws SkipLimitExceededException {
+        //Do not skip if exception is instance of FileNotFoundException
         if (exception instanceof FileNotFoundException) {
             return false;
+
+            //If exception is instance of ExcelFileParseException and skip limit is not reached
+            //log an error
         } else if (exception instanceof ExcelFileParseException && skipCount <= 5) {
             StringBuilder errorMessage = new StringBuilder();
             errorMessage.append("An error occurred while processing");
             errorMessage.append( "\n");
+            //log an error and continue
             logger.error("{}", errorMessage.toString());
             return true;
         } else {
